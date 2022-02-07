@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useRef, useEffect } from "react";
 import Layer from "../../utils/layer";
 import ParallaxSpeed from "./ParallaxSpeed";
+import useCanvas from "../../hooks/useCanvas";
 
 export const Parallax = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
     const bgLayerSrc = useRef("/images/sprites/halloween-background/1_game_background/layers/");
     const [gameSpeed, setGameSpeed] = useState(4);
     const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,12 +12,9 @@ export const Parallax = () => {
         setGameSpeed(() => inputValue);
     };
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas?.getContext("2d");
-        const canvasWidth = canvas?.width;
-        const canvasHeight = canvas?.height;
+    const { canvasRef, ctx, canvasWidth, canvasHeight } = useCanvas();
 
+    useEffect(() => {
         let requestId: number;
         const bgLayer1 = new Image();
         bgLayer1.src = bgLayerSrc.current + "1.png";
@@ -34,19 +31,19 @@ export const Parallax = () => {
         const bgLayer7 = new Image();
         bgLayer7.src = bgLayerSrc.current + "7.png";
 
-        const layer1 = new Layer({ image: bgLayer1, speedModifier: 0.01, gameSpeed, ctx: ctx! });
-        const layer2 = new Layer({ image: bgLayer2, speedModifier: 0.1, gameSpeed, ctx: ctx! });
-        const layer3 = new Layer({ image: bgLayer3, speedModifier: 0.2, gameSpeed, ctx: ctx! });
-        const layer4 = new Layer({ image: bgLayer4, speedModifier: 0.3, gameSpeed, ctx: ctx! });
-        const layer5 = new Layer({ image: bgLayer5, speedModifier: 0.4, gameSpeed, ctx: ctx! });
-        const layer6 = new Layer({ image: bgLayer6, speedModifier: 0.5, gameSpeed, ctx: ctx! });
-        const layer7 = new Layer({ image: bgLayer7, speedModifier: 1, gameSpeed, ctx: ctx! });
+        const layer1 = new Layer({ image: bgLayer1, speedModifier: 0.01, gameSpeed, ctx: ctx.current! });
+        const layer2 = new Layer({ image: bgLayer2, speedModifier: 0.1, gameSpeed, ctx: ctx.current! });
+        const layer3 = new Layer({ image: bgLayer3, speedModifier: 0.2, gameSpeed, ctx: ctx.current! });
+        const layer4 = new Layer({ image: bgLayer4, speedModifier: 0.3, gameSpeed, ctx: ctx.current! });
+        const layer5 = new Layer({ image: bgLayer5, speedModifier: 0.4, gameSpeed, ctx: ctx.current! });
+        const layer6 = new Layer({ image: bgLayer6, speedModifier: 0.5, gameSpeed, ctx: ctx.current! });
+        const layer7 = new Layer({ image: bgLayer7, speedModifier: 1, gameSpeed, ctx: ctx.current! });
 
         const gameObjects = [layer1, layer2, layer3, layer4, layer5, layer6, layer7];
 
         const animate = () => {
             if (canvasWidth && canvasHeight) {
-                ctx?.clearRect(0, 0, canvasWidth, canvasHeight);
+                ctx.current!.clearRect(0, 0, canvasWidth.current!, canvasHeight.current!);
                 gameObjects.forEach((object) => {
                     object.update();
                     object.draw();
