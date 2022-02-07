@@ -63,7 +63,7 @@ export const Parallax = () => {
     return (
         <div className="overflow-hidden flex flex-col justify-center items-center w-full h-full">
             <canvas ref={canvasRef} className="w-full" width={640} height={360} />
-            <ParallaxSpeed gameSpeed={gameSpeed} handleSpeedChange={handleSpeedChange} />
+            {/* <ParallaxSpeed gameSpeed={gameSpeed} handleSpeedChange={handleSpeedChange} /> */}
         </div>
     );
 };
